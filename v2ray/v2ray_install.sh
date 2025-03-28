@@ -81,10 +81,6 @@ install_base() {
     fi
 }
 
-generate_password() {
-  date +%s | sha256sum | head -c 16
-}
-
 
 #This function will be called when user installed x-ui out of sercurity
 config_after_install() {
@@ -92,17 +88,12 @@ config_after_install() {
     config_confirm="y"  # Explicitly set config_confirm to 'y'
     config_account="admin"
     config_port='8888'
-    config_password=$(generate_password)
-    echo "Generated password: $new_password"
-
-    echo -e "${yellow}密码将使用您提供的参数设定$config_password"
-
     if [[ x"${config_confirm}" == x"y" || x"${config_confirm}" == x"Y" ]]; then
         echo -e "${yellow}您的账户名将设定为:${config_account}${plain}"
         echo -e "${yellow}您的账户密码将设定为:${config_password}${plain}"
         echo -e "${yellow}您的面板访问端口将设定为:${config_port}${plain}"
         echo -e "${yellow}确认设定,设定中${plain}"
-        /usr/local/x-ui/x-ui setting -username ${config_account} -password ${config_password}
+        /usr/local/x-ui/x-ui setting -username ${config_account} -password "$vpn_password"
         echo -e "${yellow}账户密码设定完成${plain}"
         /usr/local/x-ui/x-ui setting -port ${config_port}
         echo -e "${yellow}面板端口设定完成${plain}"
