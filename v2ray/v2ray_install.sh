@@ -88,9 +88,19 @@ config_after_install() {
     config_confirm="y"  # Explicitly set config_confirm to 'y'
     config_account="admin"
     config_port='8888'
+
+    # Read the vpn_password from the file, or use a default if it doesn't exist
+    if [ -f "/tmp/password.txt" ]; then
+        vpn_password=$(cat /tmp/password.txt)
+        echo -e "${green}成功从 /tmp/password.txt 读取到密码${plain}"
+    else
+        echo -e "${yellow}警告: 未找到 /tmp/password.txt 文件! 使用默认密码。${plain}"
+        vpn_password="123456789q"
+    fi
+
     if [[ x"${config_confirm}" == x"y" || x"${config_confirm}" == x"Y" ]]; then
         echo -e "${yellow}您的账户名将设定为:${config_account}${plain}"
-        echo -e "${yellow}您的账户密码将设定为:${config_password}${plain}"
+        echo -e "${yellow}您的账户密码将设定为:${vpn_password}${plain}"
         echo -e "${yellow}您的面板访问端口将设定为:${config_port}${plain}"
         echo -e "${yellow}确认设定,设定中${plain}"
         /usr/local/x-ui/x-ui setting -username ${config_account} -password "$vpn_password"
@@ -101,6 +111,7 @@ config_after_install() {
         echo -e "${red}已取消,所有设置项均为默认设置,请及时修改${plain}"
     fi
 }
+
 
 install_x-ui() {
     systemctl stop x-ui
