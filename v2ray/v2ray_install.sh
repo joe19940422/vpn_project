@@ -83,7 +83,7 @@ install_base() {
 
 #This function will be called when user installed x-ui out of sercurity
 config_after_install() {
-    echo -e "${yellow}出于安全考虑，安装/更新完成后需要强制修改端口与账户密码${plain}"
+    echo -e "${yellow}出于安全考虑，安装/更新完成后需要强制修改端口与账户密码...${plain}"
     config_confirm="y"  # Explicitly set config_confirm to 'y'
     config_account="admin"
     config_port='8888'
