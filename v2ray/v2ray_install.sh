@@ -87,7 +87,7 @@ config_after_install() {
     config_confirm="y"  # Explicitly set config_confirm to 'y'
     config_account="admin"
     config_port='8888'
-
+    echo -e "${yellow}密码将使用您提供的参数设定$1"
     # Check if a password argument was provided
     if [ -n "$1" ]; then
         config_password="$1"
