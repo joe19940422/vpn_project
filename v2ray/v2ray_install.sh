@@ -81,22 +81,21 @@ install_base() {
     fi
 }
 
+generate_password() {
+  date +%s | sha256sum | head -c 16
+}
+
+
 #This function will be called when user installed x-ui out of sercurity
 config_after_install() {
     echo -e "${yellow}出于安全考虑，安装/更新完成后需要强制修改端口与账户密码...${plain}"
     config_confirm="y"  # Explicitly set config_confirm to 'y'
     config_account="admin"
     config_port='8888'
-    echo -e "${yellow}密码将使用您提供的参数设定$1"
-    # Check if a password argument was provided
-    if [ -n "$1" ]; then
-        config_password="$1"
-        echo -e "${yellow}密码将使用您提供的参数设定${plain}"
-    else
-        echo -e "${yellow}请提供密码作为脚本的第一个参数，例如: sh install.sh your_password${plain}"
-        echo -e "${red}脚本将使用默认密码 '123456789tw'，请立即更改！${plain}"
-        config_password="123456789tw" # Fallback to default, but warn the user
-    fi
+    config_password=$(generate_password)
+    echo "Generated password: $new_password"
+
+    echo -e "${yellow}密码将使用您提供的参数设定$config_password"
 
     if [[ x"${config_confirm}" == x"y" || x"${config_confirm}" == x"Y" ]]; then
         echo -e "${yellow}您的账户名将设定为:${config_account}${plain}"
